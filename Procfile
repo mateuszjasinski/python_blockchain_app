@@ -1,1 +1,1 @@
-web: gunicorn node_server.py
+web: gunicorn wsgi:app
