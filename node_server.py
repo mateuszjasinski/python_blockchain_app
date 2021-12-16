@@ -1,3 +1,4 @@
+import sys
 from hashlib import sha256
 import json
 import time
@@ -54,9 +55,11 @@ class Blockchain:
         """
         previous_hash = self.last_block.hash
 
+        print(previous_hash, block.previous_hash)
         if previous_hash != block.previous_hash:
             return False
 
+        print(Blockchain.is_valid_proof(block, proof))
         if not Blockchain.is_valid_proof(block, proof):
             return False
 
@@ -233,7 +236,9 @@ def register_with_existing_node():
         # update chain and the peers
         chain_dump = response.json()['chain']
         blockchain = create_chain_from_dump(chain_dump)
+        print(response.json()['peers'])
         peers.update(response.json()['peers'])
+        peers.update((f"{node_address}/",))
         return "Registration successful", 200
     else:
         # if something goes wrong, pass it on to the API response
@@ -295,7 +300,9 @@ def consensus():
     longest_chain = None
     current_len = len(blockchain.chain)
 
+    print(peers)
     for node in peers:
+        print(f"PRINT {node}")
         response = requests.get('{}chain'.format(node))
         length = response.json()['length']
         chain = response.json()['chain']
@@ -318,10 +325,11 @@ def announce_new_block(block):
     """
     for peer in peers:
         url = "{}add_block".format(peer)
+        print(url)
         headers = {'Content-Type': "application/json"}
         requests.post(url,
                       data=json.dumps(block.__dict__, sort_keys=True),
                       headers=headers)
 
 # Uncomment this line if you want to specify the port number in the code
-#app.run(debug=True, port=8000)
+app.run(debug=True, port=sys.argv[1])
