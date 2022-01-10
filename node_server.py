@@ -237,7 +237,7 @@ def register_with_existing_node():
 
     if response.status_code == 200:
         global blockchain
-        global peers
+        # global peers
         # update chain and the peers
         chain_dump = response.json()['chain']
         blockchain = create_chain_from_dump(chain_dump)

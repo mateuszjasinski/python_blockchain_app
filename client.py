@@ -21,10 +21,10 @@ def send_coins(sender, receiver, amount):
     return True
 
 
-def create_fake_transactions(no_of_transactions: int = 5):
+def create_fake_transactions(no_of_transactions: int = 1):
     import random
     for _ in range(no_of_transactions):
-        send_coins("tivix-bank", "mateusz.jasinski@tivix.com", random.randint(1, 100))
+        send_coins("tivix-bank", "mateusz", random.randint(1, 100))
 
 
 def get_balance(account_id):
@@ -58,6 +58,7 @@ if __name__ == '__main__':
                 account_id = input("Account id: ")
                 print(get_balance(account_id))
             if next_action == "2":
+                sender = input("Sender id: ")
                 receiver = input("Receiver id: ")
                 amount = input(f"Amount (max.{get_balance('mateusz.jasinski@tivix.com')}): ")
-                send_coins("mateusz.jasinski@tivix.com", receiver, float(amount))
+                send_coins(sender, receiver, float(amount))
